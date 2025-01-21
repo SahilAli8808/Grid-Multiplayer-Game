@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { FaUsersBetweenLines } from "react-icons/fa6";
+import { HiUsers } from "react-icons/hi2";
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
@@ -47,7 +49,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-300 flex flex-col items-center justify-center p-6">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">Real-Time Grid Game</h1>
-      <p className="text-lg font-medium text-gray-700 mb-4">Online Players: {onlinePlayers}</p>
+      <p className="text-lg font-medium text-gray-700 mb-4"><HiUsers className='inline' /> Online:  {onlinePlayers} Players</p>
       {timer > 0 && !canUpdate && (
         <p className="text-red-600 font-semibold text-lg mb-4">
           You can update again in {timer}s
