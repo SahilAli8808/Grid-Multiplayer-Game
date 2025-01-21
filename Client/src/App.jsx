@@ -1,43 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { io } from "socket.io-client";
-import Grid from "./components/Grid";
+import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:3000');
 
 const App = () => {
-  const [grid, setGrid] = useState(Array(10).fill(Array(10).fill("")));
-  const [playersOnline, setPlayersOnline] = useState(0);
-  const [socket, setSocket] = useState(null);
+  const [grid, setGrid] = useState(Array.from({ length: 10 }, () => Array(10).fill('')));
+  const [onlinePlayers, setOnlinePlayers] = useState(0);
+  const [canUpdate, setCanUpdate] = useState(true);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
-    setSocket(newSocket);
-
-    newSocket.on("init", (data) => {
-      setGrid(data.grid);
-      setPlayersOnline(data.playersOnline);
-    });
-
-    newSocket.on("update-grid", (updatedGrid) => {
+    socket.on('updateGrid', (updatedGrid) => {
       setGrid(updatedGrid);
     });
 
-    newSocket.on("update-players", (count) => {
-      setPlayersOnline(count);
+    socket.on('updateOnlinePlayers', (count) => {
+      setOnlinePlayers(count);
     });
 
-    return () => newSocket.disconnect();
+    return () => {
+      socket.off('updateGrid');
+      socket.off('updateOnlinePlayers');
+    };
   }, []);
 
   const handleBlockClick = (row, col) => {
-    if (socket) {
-      socket.emit("block-click", { row, col, char: "★" });
+    if (canUpdate && !grid[row][col]) {
+      const char = prompt('Enter a Unicode character:');
+      if (char) {
+        socket.emit('updateBlock', { row, col, char });
+        setCanUpdate(false);
+        setTimeout(() => setCanUpdate(true), 60000); // 1-minute restriction
+      }
     }
   };
 
   return (
-    <div>
-      <h1>Real-Time Multiplayer Grid</h1>
-      <p>Players Online: {playersOnline}</p>
-      <Grid grid={grid} onBlockClick={handleBlockClick} />
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+      <h1 className="text-2xl font-bold mb-4">Real-Time Grid Game</h1>
+      <p className="mb-2">Online Players: {onlinePlayers}</p>
+      <div className="grid grid-cols-10 gap-1">
+        {grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) => (
+            <div
+              key={`${rowIndex}-${colIndex}`}
+              onClick={() => handleBlockClick(rowIndex, colIndex)}
+              className={`w-12 h-12 flex items-center justify-center border bg-white text-xl font-bold cursor-pointer`}
+            >
+              {cell}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
