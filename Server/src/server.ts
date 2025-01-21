@@ -1,48 +1,49 @@
 import express from "express";
-import { WebSocketServer } from "ws";
-import cors from "cors";
+  import { createServer } from "http";
+  import { Server } from "socket.io";
+  import cors from "cors";
 
-const app = express();
-const port = 3000;
-
-app.use(cors());
-const server = app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
-const wss = new WebSocketServer({ server });
-
-let gridState = Array(10)
-  .fill(null)
-  .map(() => Array(10).fill(""));
-let playersOnline = 0;
-
-wss.on("connection", (ws) => {
-  playersOnline++;
-  ws.send(JSON.stringify({ type: "INIT", grid: gridState, playersOnline }));
-
-  ws.on("message", (data) => {
-    const message = JSON.parse(data.toString());
-    if (message.type === "UPDATE_BLOCK") {
-      const { row, col, char } = message;
-      gridState[row][col] = char;
-
-      wss.clients.forEach((client) => {
-        if (client.readyState === ws.OPEN) {
-          client.send(
-            JSON.stringify({ type: "UPDATE_GRID", grid: gridState })
-          );
-        }
-      });
-    }
+  const app = express();
+  const server = createServer(app);
+  const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:5173", // Vite dev server
+      methods: ["GET", "POST"],
+    },
   });
 
-  ws.on("close", () => {
-    playersOnline--;
-    wss.clients.forEach((client) => {
-      if (client.readyState === ws.OPEN) {
-        client.send(JSON.stringify({ type: "PLAYER_COUNT", playersOnline }));
+  // Initialize 10x10 grid
+  let grid = Array(10)
+    .fill(null)
+    .map(() => Array(10).fill(""));
+  let playersOnline = 0;
+
+  io.on("connection", (socket) => {
+    playersOnline++;
+    console.log(`A user connected: ${socket.id}`);
+    io.emit("update-players", playersOnline);
+
+    // Send the initial grid to the new user
+    socket.emit("init", { grid, playersOnline });
+
+    // Listen for block clicks
+    socket.on("block-click", ({ row, col, char }) => {
+      if (!grid[row][col]) {
+        grid[row][col] = char;
+        io.emit("update-grid", grid);
       }
     });
+
+    // Handle user disconnect
+    socket.on("disconnect", () => {
+      playersOnline--;
+      io.emit("update-players", playersOnline);
+      console.log(`A user disconnected: ${socket.id}`);
+    });
   });
-});
+
+  // Start the server
+  const PORT = 3000;
+  server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
