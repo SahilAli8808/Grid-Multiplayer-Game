@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FaUsersBetweenLines } from "react-icons/fa6";
+import { GrGrid } from "react-icons/gr";
 import { HiUsers } from "react-icons/hi2";
 import { io } from 'socket.io-client';
 
@@ -33,6 +35,8 @@ const App = () => {
         socket.emit('updateBlock', { row, col, char });
         setCanUpdate(false);
         setTimer(60); // Set the timer to 60 seconds
+        toast.success('You played a move , wait for other players to play');
+
         const countdown = setInterval(() => {
           setTimer((prev) => {
             if (prev <= 1) {
@@ -48,11 +52,11 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-300 flex flex-col items-center justify-center p-6">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">Real-Time Grid Game</h1>
-      <p className="text-lg font-medium text-gray-700 mb-4"><HiUsers className='inline' /> Online:  {onlinePlayers} Players</p>
+      <h1 className="text-4xl font-bold text-gray-800 mb-6"> <GrGrid className='inline'/> Real-Time Grid Game</h1>
+      <p className="text-lg font-medium text-gray-700 mb-4"><HiUsers className='inline' /> Online: <span className='text-green-600'>{onlinePlayers} Players </span> </p>
       {timer > 0 && !canUpdate && (
-        <p className="text-red-600 font-semibold text-lg mb-4">
-          You can update again in {timer}s
+        <p className="text-red-600 font-semibold text-lg mb-4"> 
+          You can play again in {timer}s
         </p>
       )}
       <div
@@ -68,8 +72,8 @@ const App = () => {
               onClick={() => handleBlockClick(rowIndex, colIndex)}
               className={`w-12 h-12 flex items-center justify-center border-2 rounded-lg ${
                 cell
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-gray-800 hover:bg-blue-200'
+                  ? 'bg-black text-white'
+                  : 'bg-white text-gray-800 hover:bg-gray-200'
               } font-bold shadow-md transition-all duration-300 cursor-pointer`}
             >
               {cell}
