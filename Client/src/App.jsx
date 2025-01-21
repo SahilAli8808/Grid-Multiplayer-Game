@@ -1,3 +1,4 @@
+import { Badge, Heading } from '@radix-ui/themes';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaUsersBetweenLines } from "react-icons/fa6";
@@ -51,9 +52,10 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-300 flex flex-col items-center justify-center p-6">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6"> <GrGrid className='inline'/> Real-Time Grid Game</h1>
-      <p className="text-lg font-medium text-gray-700 mb-4"><HiUsers className='inline' /> Online: <span className='text-green-600'>{onlinePlayers} Players </span> </p>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6">
+     
+      <Heading>  <GrGrid className='inline'/> Real-Time Grid Game</Heading>
+      <p className="text-lg font-medium text-gray-700 mb-4"><HiUsers className='inline' /> Online:  <Badge color="green">{onlinePlayers} Players</Badge>  </p>
       {timer > 0 && !canUpdate && (
         <p className="text-red-600 font-semibold text-lg mb-4"> 
           You can play again in {timer}s
