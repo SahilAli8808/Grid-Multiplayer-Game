@@ -45,19 +45,30 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <h1 className="text-2xl font-bold mb-4">Real-Time Grid Game</h1>
-      <p className="mb-2">Online Players: {onlinePlayers}</p>
+    <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-300 flex flex-col items-center justify-center p-6">
+      <h1 className="text-4xl font-bold text-gray-800 mb-6">Real-Time Grid Game</h1>
+      <p className="text-lg font-medium text-gray-700 mb-4">Online Players: {onlinePlayers}</p>
       {timer > 0 && !canUpdate && (
-        <p className="text-red-500 mb-2">You can update again in {timer}s</p>
+        <p className="text-red-600 font-semibold text-lg mb-4">
+          You can update again in {timer}s
+        </p>
       )}
-      <div className="grid grid-cols-10 gap-1">
+      <div
+        className={`grid grid-cols-10 gap-2 ${
+          !canUpdate ? 'pointer-events-none opacity-50' : ''
+        }`}
+        title={!canUpdate ? 'Update restricted' : ''}
+      >
         {grid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
               onClick={() => handleBlockClick(rowIndex, colIndex)}
-              className={`w-12 h-12 flex items-center justify-center border bg-white text-xl font-bold cursor-pointer`}
+              className={`w-12 h-12 flex items-center justify-center border-2 rounded-lg ${
+                cell
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-white text-gray-800 hover:bg-blue-200'
+              } font-bold shadow-md transition-all duration-300 cursor-pointer`}
             >
               {cell}
             </div>
