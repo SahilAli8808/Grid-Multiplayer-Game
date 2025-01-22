@@ -29,7 +29,7 @@ A web application where players can collaboratively update a 10x10 grid with Uni
    ```
 4. Start the server:
    ```bash
-   node server.ts
+   npm run dev
    ```
 ### Frontend
 1. Navigate to the frontend directory.
