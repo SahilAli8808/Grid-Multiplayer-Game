@@ -2,6 +2,11 @@
 
 A web application where players can collaboratively update a 10x10 grid with Unicode characters. Each player can interact with the same shared grid, with restrictions to ensure fairness and a live player count.
 
+## Screenshots
+
+![Screenshot 1](https://github.com/SahilAli8808/Grid-Multiplayer-Game/blob/main/Screenshot.jpg)
+![Screenshot 2](https://github.com/SahilAli8808/Grid-Multiplayer-Game/blob/main/Screenshot2.jpg)
+
 ## Features
 
 - **Real-Time Grid Updates**: All players share the same grid, updated live using Socket.IO.
