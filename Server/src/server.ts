@@ -7,7 +7,7 @@ import { handleSocketConnections } from './utils/socketUtils.js';
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
+  cors: { 
     origin: '*',
     methods: ['GET', 'POST'],
   },

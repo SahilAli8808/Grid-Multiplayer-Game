@@ -8,20 +8,20 @@ export class GameService {
     return this.gridState;
   }
 
-//   static updateBlock(row: number, col: number, char: string): GridState {
-//     if (!this.gridState[row][col]) {
-//       this.gridState[row][col] = char;
-//     }
-//     return this.gridState;
-//   }
-
-static updateBlock(row: number, col: number, char: string): GridState {
-    const newGridState = [...this.gridState.map(row => [...row])]; // Make a deep copy of the grid
-    if (!newGridState[row][col]) {
-      newGridState[row][col] = char;
+  static updateBlock(row: number, col: number, char: string): GridState {
+    if (!this.gridState[row][col]) {
+      this.gridState[row][col] = char;
     }
-    return newGridState;
+    return this.gridState;
   }
+
+// static updateBlock(row: number, col: number, char: string): GridState {
+//     const newGridState = [...this.gridState.map(row => [...row])]; // Make a deep copy of the grid
+//     if (!newGridState[row][col]) {
+//       newGridState[row][col] = char;
+//     }
+//     return newGridState;
+//   }
 
   static increasePlayerCount() {
     this.onlinePlayers++;
