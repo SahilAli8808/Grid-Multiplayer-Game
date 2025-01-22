@@ -8,9 +8,7 @@ import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <Theme appearance="dark">
       <App />
-    </Theme>
     <Toaster/>
   </StrictMode>,
 )
