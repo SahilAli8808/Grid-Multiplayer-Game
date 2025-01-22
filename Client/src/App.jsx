@@ -7,9 +7,10 @@ import { HiUsers } from "react-icons/hi2";
 import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const App = () => {
+  console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
   const [grid, setGrid] = useState(Array.from({ length: 10 }, () => Array(10).fill('')));
   const [onlinePlayers, setOnlinePlayers] = useState(0);
   const [canUpdate, setCanUpdate] = useState(true);
