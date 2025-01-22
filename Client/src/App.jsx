@@ -1,7 +1,7 @@
-import { Badge, Heading } from '@radix-ui/themes';
+import { Badge, Callout, Heading } from '@radix-ui/themes';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FaUsersBetweenLines } from "react-icons/fa6";
+import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { GrGrid } from "react-icons/gr";
 import { HiUsers } from "react-icons/hi2";
 import { io } from 'socket.io-client';
@@ -55,6 +55,15 @@ const App = () => {
     <div className="min-h-screen flex flex-col items-center justify-center p-6">
      
       <Heading>  <GrGrid className='inline'/> Real-Time Grid Game</Heading>
+      <Callout.Root>
+	<Callout.Icon>
+		<InfoCircledIcon />
+	</Callout.Icon>
+	<Callout.Text>
+		I am using free tier of render, so the server may take some time to wake up.
+	</Callout.Text>
+</Callout.Root>
+
       <p className="text-lg font-medium text-gray-700 mb-4"><HiUsers className='inline' /> Online:  <Badge color="green">{onlinePlayers} Players</Badge>  </p>
       {timer > 0 && !canUpdate && (
         <p className="text-red-600 font-semibold text-lg mb-4"> 
