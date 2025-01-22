@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Theme,  Callout, Badge, Heading, Text  } from '@radix-ui/themes';
+import { Theme, Callout, Badge, Heading, Text } from '@radix-ui/themes';
 import toast from 'react-hot-toast';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { GrGrid } from "react-icons/gr";
@@ -10,12 +10,15 @@ import { io } from 'socket.io-client';
 const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const App = () => {
-  console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+  // console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
   const [grid, setGrid] = useState(Array.from({ length: 10 }, () => Array(10).fill('')));
   const [onlinePlayers, setOnlinePlayers] = useState(0);
   const [canUpdate, setCanUpdate] = useState(true);
   const [timer, setTimer] = useState(0);
   const [theme, setTheme] = useState('light'); // Track the current theme
+
+  // Load the pop sound
+  const popSound = new Audio('/popsound.mp3');
 
   useEffect(() => {
     socket.on('updateGrid', (updatedGrid) => {
@@ -33,9 +36,13 @@ const App = () => {
   }, []);
 
   const handleBlockClick = (row, col) => {
+      // Play the pop sound
+      popSound.play();
     if (canUpdate && !grid[row][col]) {
       const char = prompt('Enter a Unicode character:');
       if (char) {
+      
+
         socket.emit('updateBlock', { row, col, char });
         setCanUpdate(false);
         setTimer(60);
@@ -62,28 +69,25 @@ const App = () => {
   return (
     <Theme appearance={theme}>
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
-        <div className="flex items-center justify-between  max-w-xl mb-2">
+        <div className="flex items-center justify-between max-w-xl mb-2">
           <Heading>
             <GrGrid className="inline" /> Real-Time Grid Game
           </Heading>
           <button
             onClick={toggleTheme}
-            className="p-2 "
+            className="p-2"
             aria-label="Toggle theme"
           >
-            {/* Change Theme */}
-            {theme === 'dark' ? <SunIcon className="ml-4 " /> : <MoonIcon className="ml-4 " />}
+            {theme === 'dark' ? <SunIcon className="ml-4" /> : <MoonIcon className="ml-4" />}
           </button>
         </div>
-        {/* horizontal line */}
-        {/* <hr className="w-full border-t border-gray-300 " /> */}
-        
+
         <Callout.Root>
           <Callout.Icon>
             <InfoCircledIcon />
           </Callout.Icon>
           <Callout.Text>
-            I am using free tier of Render, so the server may take some time to wake up.
+            I am using the free tier of Render, so the server may take some time to wake up.
           </Callout.Text>
         </Callout.Root>
 
