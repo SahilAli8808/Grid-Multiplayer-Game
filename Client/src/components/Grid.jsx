@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Grid = ({ grid, handleBlockClick, canUpdate }) => (
+const Grid = ({ grid, handleBlockClick, canUpdate }) =>{
+  // console.log(grid, handleBlockClick,canUpdate )
+
+ return (
+
   <div
     className={`grid grid-cols-10 gap-2 ${
       !canUpdate ? 'pointer-events-none opacity-50' : ''
@@ -9,8 +13,11 @@ const Grid = ({ grid, handleBlockClick, canUpdate }) => (
   >
     {grid.map((row, rowIndex) =>
       row.map((cell, colIndex) => (
+        // console.log(rowIndex-colIndex)
+        
         <div
           key={`${rowIndex}-${colIndex}`}
+
           onClick={() => handleBlockClick(rowIndex, colIndex)}
           className={`w-12 h-12 flex items-center justify-center border-2 rounded-lg ${
             cell
@@ -18,11 +25,12 @@ const Grid = ({ grid, handleBlockClick, canUpdate }) => (
               : 'bg-white text-gray-800 hover:bg-gray-200'
           } font-bold shadow-md transition-all duration-300 cursor-pointer`}
         >
+           {/* {String(rowIndex - colIndex)} */}
           {cell}
         </div>
       ))
     )}
   </div>
-);
+)};
 
 export default Grid;

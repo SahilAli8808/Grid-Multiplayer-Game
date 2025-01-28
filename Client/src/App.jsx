@@ -11,7 +11,9 @@ import TimerMessage from './components/TimerMessage';
 const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const App = () => {
+  // creating empty grid matrix of 10 X 10 
   const [grid, setGrid] = useState(Array.from({ length: 10 }, () => Array(10).fill('')));
+
   const [onlinePlayers, setOnlinePlayers] = useState(0);
   const [canUpdate, setCanUpdate] = useState(true);
   const [timer, setTimer] = useState(0);
@@ -26,12 +28,20 @@ const App = () => {
       socket.off('updateGrid');
       socket.off('updateOnlinePlayers');
     };
+    
   }, []);
 
   const handleBlockClick = (row, col) => {
+    console.log(row, col);
     popSound.play();
+    //check can update or not and grid is empty
+    console.log(!grid[row][col])
     if (canUpdate && !grid[row][col]) {
       const char = prompt('Enter a Unicode character:');
+      if (char.length != 1){
+        toast.error("Input should be a single character")
+        return 
+      }
       if (char) {
         socket.emit('updateBlock', { row, col, char });
         setCanUpdate(false);

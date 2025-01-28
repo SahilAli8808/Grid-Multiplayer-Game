@@ -15,15 +15,8 @@ export class GameService {
     return this.gridState;
   }
 
-// static updateBlock(row: number, col: number, char: string): GridState {
-//     const newGridState = [...this.gridState.map(row => [...row])]; // Make a deep copy of the grid
-//     if (!newGridState[row][col]) {
-//       newGridState[row][col] = char;
-//     }
-//     return newGridState;
-//   }
-
   static increasePlayerCount() {
+    // console.log("this: ", this)
     this.onlinePlayers++;
   }
 
